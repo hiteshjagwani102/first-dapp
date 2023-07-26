@@ -81,7 +81,6 @@ export default function App() {
       try {
         const accounts = await window.ethereum.request({method : "eth_requestAccounts"});
         setWalletAddress(accounts[0]);
-        console.log(accounts[0]);
       } catch(err: any){
         console.log(err.message)
       }
@@ -131,9 +130,9 @@ export default function App() {
       web3.eth.sendTransaction({
         from: walletAddress,
         to : e.target.to_address.value,
-        value:web3.utils.toWei('0.001', 'ether'),
+        value:web3.utils.toWei('0.001', 'ether').toString(),
         gas: 21000,
-        gasPrice: web3.utils.toWei('100', 'gwei')
+        gasPrice: web3.utils.toWei('100', 'gwei').toString()
       })
       .then(function(receipt){
         console.log(receipt);
