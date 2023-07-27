@@ -1,9 +1,13 @@
 import React,  { useState, useEffect } from "react";
 import Web3 from 'web3';
+import {ethers} from 'ethers'
+import "./App.scss"
+import { accounts } from "web3/lib/commonjs/eth.exports";
 
 var web3 = new Web3(window.ethereum);
+const provider = new ethers.WebSocketProvider(window.ethereum);
 
-
+const wallet = provider.getSigner()
 
 
 interface chain {
@@ -79,8 +83,7 @@ export default function App() {
   const connectWallet = async() => {
     if(window.ethereum) {
       try {
-        const accounts = await window.ethereum.request({method : "eth_requestAccounts"});
-        setWalletAddress(accounts[0]);
+        await window.ethereum.enable();
       } catch(err: any){
         console.log(err.message)
       }
@@ -94,7 +97,7 @@ export default function App() {
   const getCurrentWalletConnected = async() => {
     if(window.ethereum) {
       try {
-        const accounts = await window.ethereum.request({method : "eth_accounts"});
+        const accounts = await web3.eth.getAccounts()
         if(accounts.length>0) {
           setWalletAddress(accounts[0]);
         } else {
@@ -130,7 +133,7 @@ export default function App() {
       web3.eth.sendTransaction({
         from: walletAddress,
         to : e.target.to_address.value,
-        value:web3.utils.toWei('0.001', 'ether').toString(),
+        value :web3.utils.toWei(e.target.eth.value, 'ether').toString(),
         gas: 21000,
         gasPrice: web3.utils.toWei('100', 'gwei').toString()
       })
@@ -144,28 +147,47 @@ export default function App() {
 
   }
 
+  // const sendTransactionUsingEtherjs = async(e: any) => {
+  //   e.preventDefault();
+
+  //   if(window.ethereum){
+  //     await wallet.sendTransaction({
+  //       from: walletAddress,
+  //       to : e.target.to_address.value,
+  //       value :web3.utils.toWei(e.target.eth.value, 'ether').toString(),
+  //       gasPrice: web3.utils.toWei('100', 'gwei').toString()
+  //     })
+      
+  //   }
+      
+
+  // }
+
 
 
   return (
     <div>
-      <button onClick={connectWallet} >
+      <button className="connectButton" onClick={connectWallet} >
         {
           walletAddress && walletAddress.length>0 ? `Connected : ${walletAddress.substring(0,6)}...${walletAddress.substring(38)}` : "Connect Wallet"
         }
       </button>
 
-      <button onClick={(e: any) => switchNetwork("polygon")} >
+      <div className="networkSwitch">
+      <button className="polygon" onClick={(e: any) => switchNetwork("polygon")} >
         Switch to Polygon
       </button>
-
-      <button onClick={(e: any) => switchNetwork("bsc")}>
+      <button className="bsc" onClick={(e: any) => switchNetwork("bsc")}>
         Switch to bsc
       </button>
+      </div>
 
       <form onSubmit={sendTransaction}>
           <h3>Enter Transaction Address: </h3>
-          <input type="text" name="to_address" placeholder="Address"></input>
-          <input type="submit" value="Submit"></input>
+          <input className="address" type="text" name="to_address" placeholder="Address"></input>
+          <input className="address" type="text" name="eth" placeholder="Value"></input>
+
+          <input className="submitButton" type="submit" value="Send"></input>
       </form>
     </div>
   );
