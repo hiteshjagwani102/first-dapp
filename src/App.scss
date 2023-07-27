@@ -59,7 +59,7 @@ div{
         color: white;
 
         .address{
-            width:500px;
+            width:400px;
             padding:10px;
             border-radius: 20px;
             border: none;
@@ -73,5 +73,9 @@ div{
             border: none;
         }
         
+    }
+
+    .etherForm{
+        margin-top:20px;
     }
 }

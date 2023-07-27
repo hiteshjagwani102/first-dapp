@@ -5,7 +5,7 @@ import "./App.scss"
 import { accounts } from "web3/lib/commonjs/eth.exports";
 
 var web3 = new Web3(window.ethereum);
-const provider = new ethers.WebSocketProvider(window.ethereum);
+const provider = new ethers.BrowserProvider(window.ethereum);
 
 const wallet = provider.getSigner()
 
@@ -83,8 +83,9 @@ export default function App() {
   const connectWallet = async() => {
     if(window.ethereum) {
       try {
-        await window.ethereum.enable();
-      } catch(err: any){
+        const accounts = await window.ethereum.request({method : "eth_requestAccounts"});
+        setWalletAddress(accounts[0]);
+      }  catch(err: any){
         console.log(err.message)
       }
       
@@ -147,21 +148,22 @@ export default function App() {
 
   }
 
-  // const sendTransactionUsingEtherjs = async(e: any) => {
-  //   e.preventDefault();
+  const sendTransactionUsingEtherjs = async(e: any) => {
+    e.preventDefault();
 
-  //   if(window.ethereum){
-  //     await wallet.sendTransaction({
-  //       from: walletAddress,
-  //       to : e.target.to_address.value,
-  //       value :web3.utils.toWei(e.target.eth.value, 'ether').toString(),
-  //       gasPrice: web3.utils.toWei('100', 'gwei').toString()
-  //     })
-      
-  //   }
-      
-
-  // }
+    if(window.ethereum){
+      try{
+        await (await wallet).sendTransaction({
+          from: walletAddress,
+          to : e.target.to_address.value,
+          value :web3.utils.toWei(e.target.eth.value, 'ether').toString(),
+          gasPrice: web3.utils.toWei('100', 'gwei').toString()
+        })
+      } catch(err: any) {
+        console.log(err.message)
+      }
+    }
+  }
 
 
 
@@ -183,7 +185,15 @@ export default function App() {
       </div>
 
       <form onSubmit={sendTransaction}>
-          <h3>Enter Transaction Address: </h3>
+          <h3>Send Transaction using Web3.js </h3>
+          <input className="address" type="text" name="to_address" placeholder="Address"></input>
+          <input className="address" type="text" name="eth" placeholder="Value"></input>
+
+          <input className="submitButton" type="submit" value="Send"></input>
+      </form>
+
+      <form className="etherForm" onSubmit={sendTransactionUsingEtherjs}>
+          <h3>Send Transaction using Ethers.js </h3>
           <input className="address" type="text" name="to_address" placeholder="Address"></input>
           <input className="address" type="text" name="eth" placeholder="Value"></input>
 
