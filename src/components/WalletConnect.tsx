@@ -6,12 +6,15 @@ import {useWeb3Context} from '../Context'
 
 const WalletConnect = () => {
 
-  const { walletAddress,setWalletAddress } = useWeb3Context()
+  const { walletAddress,setWalletAddress,setIsConnected } = useWeb3Context()
 
   const connectWallet = () => {
     getAccounts().then(
       accounts => {
-        if(Array.isArray(accounts)) setWalletAddress(accounts[0])
+        if(Array.isArray(accounts)){
+          setWalletAddress(accounts[0]);
+          setIsConnected(true);
+        }
       }
     )
   }

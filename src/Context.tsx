@@ -7,7 +7,7 @@ const Context = React.createContext<any>(null);
 
 const Provider = ({ children }:any) => {
   const [walletAddress, setWalletAddress] = useState("");
-
+  const [isConnected, setIsConnected] = useState(false);
   var provider:any;
 if(window.ethereum) provider = new Web3(window.ethereum);
 
@@ -18,7 +18,9 @@ const getCurrentWalletConnected = async() => {
       const accounts = await provider.eth.getAccounts()
       if(accounts.length>0) {
         setWalletAddress(accounts[0]);
+        setIsConnected(true);
       } else {
+        setIsConnected(false);
         console.log("Connect to MetaMask using the Connect Button")
       }
       
@@ -35,10 +37,11 @@ const addWalletListener = async() => {
   if(window.ethereum) {
     window.ethereum.on("accountsChanged", (accounts:any)=>{
       setWalletAddress(accounts[0]);
-      console.log(accounts[0]);
+      setIsConnected(true)
     })
     
   }else {
+    setIsConnected(false);
     setWalletAddress("");
     console.log("Please Install Metamask")
   }
@@ -48,9 +51,10 @@ const addWalletListener = async() => {
 useEffect(()=>{
   getCurrentWalletConnected();
   addWalletListener();
-},[walletAddress])
+})
+
   return (
-    <Context.Provider value={{walletAddress , setWalletAddress,provider}}>
+    <Context.Provider value={{walletAddress , setWalletAddress,isConnected, setIsConnected, provider}}>
       {children}
     </Context.Provider>
   );
