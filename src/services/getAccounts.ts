@@ -1,7 +1,3 @@
-import React from 'react'
-import Web3 from "web3";
-import { useWeb3Context } from "../Context";
-
 const getAccounts = async():Promise<string[] | Error> => {
 
     if(window.ethereum) {

@@ -1,0 +1,26 @@
+.networkSwitch{
+    position: absolute;
+    left:0;
+    top:0;
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
+    
+    button{
+        padding:10px 20px;
+        border-radius: 20px;
+        border: none;
+        color: white;
+        margin: 10px;
+        cursor: pointer;
+
+    }
+
+    .polygon{
+        background-color: #8247e5;
+    }
+
+    .bsc{
+        background-color: #F0B90B;
+    }
+}

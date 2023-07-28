@@ -1,21 +1,22 @@
-import React, {useEffect, createContext,useContext,useState } from "react";
-import getProvider from "./services/getProvider";
+import React, {useEffect,useContext,useState } from "react";
 
 import Web3 from 'web3'
+import {ethers} from 'ethers'
 
 const Context = React.createContext<any>(null);
 
 const Provider = ({ children }:any) => {
   const [walletAddress, setWalletAddress] = useState("");
   const [isConnected, setIsConnected] = useState(false);
-  var provider:any;
-if(window.ethereum) provider = new Web3(window.ethereum);
+  const [provider, setProvider] = useState<Web3 | ethers.providers.Web3Provider >(new Web3(window.ethereum))
 
-//function to recognize the wall if connected once the page is reloded
-const getCurrentWalletConnected = async() => {
+
+  const getCurrentWalletConnected = async() => {
   if(window.ethereum) {
     try {
-      const accounts = await provider.eth.getAccounts()
+      let accounts: any;
+      if(provider instanceof Web3) accounts = await provider.eth.getAccounts();
+      else accounts = await provider.listAccounts()
       if(accounts.length>0) {
         setWalletAddress(accounts[0]);
         setIsConnected(true);
@@ -54,7 +55,7 @@ useEffect(()=>{
 })
 
   return (
-    <Context.Provider value={{walletAddress , setWalletAddress,isConnected, setIsConnected, provider}}>
+    <Context.Provider value={{walletAddress , setWalletAddress,isConnected, setIsConnected, provider,setProvider}}>
       {children}
     </Context.Provider>
   );

@@ -1,6 +1,7 @@
 import React,{useEffect} from 'react'
 import getAccounts from '../services/getAccounts'
 import {useWeb3Context} from '../Context'
+import styles from "../styles/walletConnect.module.scss"
 
 
 
@@ -23,7 +24,7 @@ const WalletConnect = () => {
 
   return (
     <div>
-        <button className="connectButton" onClick={connectWallet} >
+        <button className={styles.connectButton} onClick={connectWallet} >
         {
           walletAddress && walletAddress.length>0 ? `Connected : ${walletAddress.substring(0,6)}...${walletAddress.substring(38)}` : "Connect Wallet"
         }

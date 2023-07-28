@@ -1,25 +1,44 @@
 import React from 'react'
 import { useWeb3Context } from '../Context'
 import sendTransaction from '../services/sendTransaction'
+import styles from "../styles/transactionForm.module.scss"
+import Web3 from 'web3'
+import { ethers } from 'ethers'
 
 const TransactionForm = () => {
 
-    const { walletAddress,provider, isConnected } = useWeb3Context()
+    const { walletAddress,provider, isConnected, setProvider } = useWeb3Context()
     const handleSubmit = async(e : any) =>{
         sendTransaction(e,walletAddress,provider)
       }
 
+    const handleProviderChange = (e:any) => {
+      if(e.target.checked){
+        setProvider(new Web3(window.ethereum))
+      }
+      else{
+        setProvider(new ethers.providers.Web3Provider(window.ethereum))
+      }
+      console.log(provider);
+    } 
+
   return (
       <>
       {isConnected ?
-        <form onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit}>
+        <div>
         <h3>Send Transaction using Web3.js </h3>
-          <input className="address" type="text" name="to_address" placeholder="Address"></input>
-          <input className="address" type="text" name="eth" placeholder="Value"></input>
+        <label className={styles.switch}>
+          <input type="checkbox" onChange={handleProviderChange} />
+          <span className={styles.slider}></span>
+        </label>
+        </div>
+          <input className={styles.input} type="text" name="to_address" placeholder="Address"></input>
+          <input className={styles.input} type="text" name="eth" placeholder="Value"></input>
 
-          <input className="submitButton" type="submit" value="Send"></input>
+          <input className={styles.submitButton} type="submit" value="Send"></input>
           </form>
-       : <p className='tempText'>Please Connect Wallet for Transaction</p>}
+       : <p className={styles.tempText}>Please Connect Wallet for Transaction</p>}
        </>
           
       
