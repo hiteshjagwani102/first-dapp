@@ -4,9 +4,9 @@ import sendTransaction from '../services/sendTransaction'
 
 const TransactionForm = () => {
 
-    const { walletAddress,setWalletAddress,web3 } = useWeb3Context()
+    const { walletAddress,provider } = useWeb3Context()
     const handleSubmit = async(e : any) =>{
-        sendTransaction(e,walletAddress,web3)
+        sendTransaction(e,walletAddress,provider)
       }
 
   return (

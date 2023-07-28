@@ -1,13 +1,31 @@
-const sendTransaction = async(e: any,walletAddress: string, web3: any) => {
+const sendTransaction = async(e: any,walletAddress: string, provider: any) => {
     e.preventDefault();
 
+      //function to send transaction using ether js
+  // const sendTransactionUsingEtherjs = async(e: any) => {
+  //   e.preventDefault();
+
+  //   if(window.ethereum){
+  //     try{
+  //       await (await wallet).sendTransaction({
+  //         from: walletAddress,
+  //         to : e.target.to_address.value,
+  //         value :web3.utils.toWei(e.target.eth.value, 'ether').toString(),
+  //         gasPrice: web3.utils.toWei('100', 'gwei').toString()
+  //       })
+  //     } catch(err: any) {
+  //       console.log(err.message)
+  //     }
+  //   }
+  // }
+
     if(window.ethereum){
-      web3.eth.sendTransaction({
+      provider.eth.sendTransaction({
         from: walletAddress,
         to : e.target.to_address.value,
-        value :web3.utils.toWei(e.target.eth.value, 'ether').toString(),
+        value :provider.utils.toWei(e.target.eth.value, 'ether').toString(),
         gas: 21000,
-        gasPrice: web3.utils.toWei('100', 'gwei').toString()
+        gasPrice: provider.utils.toWei('100', 'gwei').toString()
       })
       .then(function(receipt:any){
         console.log(receipt);

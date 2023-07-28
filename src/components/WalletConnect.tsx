@@ -1,13 +1,12 @@
 import React,{useEffect} from 'react'
 import getAccounts from '../services/getAccounts'
-import getProvider from '../services/getProvider'
 import {useWeb3Context} from '../Context'
 
 
 
 const WalletConnect = () => {
 
-  const { walletAddress,setWalletAddress,web3 } = useWeb3Context()
+  const { walletAddress,setWalletAddress } = useWeb3Context()
 
   const connectWallet = () => {
     getAccounts().then(
