@@ -1,7 +1,6 @@
-import React,{useEffect} from 'react'
-import getAccounts from '../services/getAccounts'
 import {useWeb3Context} from '../Context'
 import styles from "../styles/walletConnect.module.scss"
+import getAccounts from '../services/getAccounts'
 
 
 

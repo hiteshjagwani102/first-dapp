@@ -8,7 +8,13 @@ const Context = React.createContext<any>(null);
 const Provider = ({ children }:any) => {
   const [walletAddress, setWalletAddress] = useState("");
   const [isConnected, setIsConnected] = useState(false);
-  const [provider, setProvider] = useState<Web3 | ethers.providers.Web3Provider >(new Web3(window.ethereum))
+  const [provider, setProvider] = useState<Web3 | ethers.providers.Web3Provider >()
+
+  useEffect(()=>{
+    if(window.ethereum){
+      setProvider(new Web3(window.ethereum))
+    }
+  },[])
 
 
   const getCurrentWalletConnected = async() => {
@@ -16,7 +22,8 @@ const Provider = ({ children }:any) => {
     try {
       let accounts: any;
       if(provider instanceof Web3) accounts = await provider.eth.getAccounts();
-      else accounts = await provider.listAccounts()
+      else if(provider instanceof ethers.providers.Web3Provider) accounts = await provider.listAccounts();
+      else throw new Error("Metamask Wallet Not Found");
       if(accounts.length>0) {
         setWalletAddress(accounts[0]);
         setIsConnected(true);

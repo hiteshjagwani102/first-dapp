@@ -17,7 +17,7 @@ const sendTransaction = async(e: any,walletAddress: string, provider: Web3 | eth
             gasPrice: provider.utils.toWei('100', 'gwei').toString()
             }).then(function(receipt:any){
             console.log(receipt);
-            })
+            }).catch((err)=>console.log(err.message))
           }
         else{
            const tx:any = await provider.getSigner().sendTransaction({
@@ -27,6 +27,7 @@ const sendTransaction = async(e: any,walletAddress: string, provider: Web3 | eth
             gasPrice: ethers.utils.parseUnits('100', 'gwei').toString()
             
         }).then(()=> console.log(tx))
+        .catch((err)=>console.log(err.message))
       }
      } catch(err:any){
         console.log(err.message)

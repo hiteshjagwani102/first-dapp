@@ -1,11 +1,13 @@
-import React from 'react'
 import { useWeb3Context } from '../Context'
 import sendTransaction from '../services/sendTransaction'
 import styles from "../styles/transactionForm.module.scss"
 import Web3 from 'web3'
 import { ethers } from 'ethers'
+import { useState } from 'react'
 
 const TransactionForm = () => {
+
+  const [providerText, setProviderText] = useState("Web3.js")
 
     const { walletAddress,provider, isConnected, setProvider } = useWeb3Context()
     const handleSubmit = async(e : any) =>{
@@ -13,11 +15,13 @@ const TransactionForm = () => {
       }
 
     const handleProviderChange = (e:any) => {
-      if(e.target.checked){
+      if(!e.target.checked){
         setProvider(new Web3(window.ethereum))
+        setProviderText("web3.js")
       }
       else{
         setProvider(new ethers.providers.Web3Provider(window.ethereum))
+        setProviderText("ether.js")
       }
       console.log(provider);
     } 
@@ -27,7 +31,7 @@ const TransactionForm = () => {
       {isConnected ?
         <form className={styles.form} onSubmit={handleSubmit}>
         <div>
-        <h3>Send Transaction using Web3.js </h3>
+        <h3>Send Transaction using {providerText} </h3>
         <label className={styles.switch}>
           <input type="checkbox" onChange={handleProviderChange} />
           <span className={styles.slider}></span>
