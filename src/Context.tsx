@@ -1,4 +1,5 @@
 import React, {useEffect,useContext,useState } from "react";
+import getAccounts from "./services/getAccounts";
 
 import Web3 from 'web3'
 import {ethers} from 'ethers'
@@ -9,12 +10,26 @@ const Provider = ({ children }:any) => {
   const [walletAddress, setWalletAddress] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [provider, setProvider] = useState<Web3 | ethers.providers.Web3Provider >()
+  const [isSending, setIsSending] = useState<boolean | undefined>(false)
 
   useEffect(()=>{
     if(window.ethereum){
       setProvider(new Web3(window.ethereum))
     }
   },[])
+
+  const connectWallet = () => {
+    getAccounts().then(
+      accounts => {
+        if(Array.isArray(accounts)){
+          setWalletAddress(accounts[0]);
+          setIsConnected(true);
+        }
+      }
+    )
+  }
+
+  
 
 
   const getCurrentWalletConnected = async() => {
@@ -62,7 +77,7 @@ useEffect(()=>{
 })
 
   return (
-    <Context.Provider value={{walletAddress , setWalletAddress,isConnected, setIsConnected, provider,setProvider}}>
+    <Context.Provider value={{walletAddress , isConnected, provider,setProvider, connectWallet}}>
       {children}
     </Context.Provider>
   );

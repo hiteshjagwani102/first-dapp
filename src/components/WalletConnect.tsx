@@ -1,25 +1,11 @@
 import {useWeb3Context} from '../Context'
 import styles from "../styles/walletConnect.module.scss"
-import getAccounts from '../services/getAccounts'
 
 
 
 const WalletConnect = () => {
 
-  const { walletAddress,setWalletAddress,setIsConnected } = useWeb3Context()
-
-  const connectWallet = () => {
-    getAccounts().then(
-      accounts => {
-        if(Array.isArray(accounts)){
-          setWalletAddress(accounts[0]);
-          setIsConnected(true);
-        }
-      }
-    )
-  }
- 
-
+  const { walletAddress, connectWallet } = useWeb3Context()
 
   return (
     <div>
